@@ -4,5 +4,5 @@ namespace SimpleSystem.Server;
 
 public interface IUserService
 {
-  Task<UserDto>CreateUserAsync(CreateUserDto createUserDto);
+  Task<UserDto?>CreateUserAsync(CreateUserDto createUserDto);
 }

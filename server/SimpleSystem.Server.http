@@ -1,6 +1,9 @@
 @SimpleSystem.Server_HostAddress = http://localhost:5177
 
-GET {{SimpleSystem.Server_HostAddress}}/weatherforecast/
-Accept: application/json
+POST http://localhost:5177/api/User/create
+Content-Type: application/json
 
+{
+    "UserName": "Iyanu752",
+}
 ###

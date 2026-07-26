@@ -12,12 +12,12 @@ public class UserService : IUserService
         _context = context;
     }
 
-    public async Task<UserDto> CreateUserAsync(CreateUserDto createUserDto)
+    public async Task<UserDto?> CreateUserAsync(CreateUserDto createUserDto)
     {
         var userNameExists = await _context.Users.AnyAsync(user => user.UserName == createUserDto.UserName);
 
         if (userNameExists) {
-            return null!;
+            return null;
         }
 
         var user = new User

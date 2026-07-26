@@ -2,9 +2,10 @@ using System;
 
 namespace SimpleSystem.Server;
 
-public class Node
+public class NodeDto
 {
-    public string NodeId {get; set;} = string.Empty;
+
+    public int Id {get; set;}
     public string RoomId {get; set;} = string.Empty;
     public int Type {get; set; }
     public int Width { get; set;}

@@ -5,6 +5,6 @@ namespace SimpleSystem.Server;
 public interface IRoomService
 {
     Task<CreateRoomDto> CreateRoomAsync();
-    Task<JoinRoomDto> JoinRoomAsync(int roomId, int code);
+    Task<JoinRoomDto> JoinRoomAsync(string roomId, string code);
 
 }

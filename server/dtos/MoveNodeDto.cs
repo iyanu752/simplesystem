@@ -3,9 +3,11 @@ using System;
 namespace SimpleSystem.Server;
 
 public class MoveNodeDto
-{
-    string NodeId {get; set;} = string.Empty;
-    double PositionX {get; set;}
-    double PositionY {get; set;}
+{   
+    public int Id {get; set;}
+    public string NodeId {get; set;} = string.Empty;
+    public string RoomId {get; set;} = string.Empty;
+    public double PositionX {get; set;}
+    public double PositionY {get; set;}
 
 }

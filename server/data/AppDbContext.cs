@@ -12,5 +12,6 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users {get; set;}
     public DbSet<Node> Nodes {get; set;}
+    public DbSet<Edge> Edges {get; set;}
 
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace SimpleSystem.Server;
 
-public class Edges
+public class Edge
 {
     public int Id {get; set;}
    public string RoomId {get; set;} = string.Empty;

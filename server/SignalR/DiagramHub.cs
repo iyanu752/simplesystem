@@ -6,13 +6,12 @@ namespace SimpleSystem.Server;
 
 public class DiagramHub : Hub
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
 
-    public DiagramHub (AppDbContext context, IMapper mapper)
+    private readonly IDiagramService _diagramService;
+
+    public DiagramHub (IDiagramService diagramService)
     {
-        _context = context;
-        _mapper = mapper;
+        _diagramService = diagramService;
     }
     
     public async Task JoinRoom(string userName, string roomCode)
@@ -21,25 +20,45 @@ public class DiagramHub : Hub
         await Clients.Group(roomCode).SendAsync("User joined", userName);
     }
 
-    public async Task CreateNode(NodeDto nodeDto)
+    public async Task LeaveRoom(string roomCode)
     {
-        var node = _mapper.Map<Node>(nodeDto);
-        _context.Nodes.Add(node);
-        await _context.SaveChangesAsync();
-        await Clients.Group(node.RoomId).SendAsync("Node Created", node);
+        await Groups.RemoveFromGroupAsync(
+            Context.ConnectionId,
+            roomCode);
+
+        await Clients.Group(roomCode)
+            .SendAsync("UserLeft", Context.ConnectionId);
     }
 
-    //Todo: Migrate database before pushing to github
-
-    public async Task MoveNode(MoveNodeDto moveNodeDto)
+    public async Task CreateNode(CreateNodeDto createNodeDto)
     {
-        var node = _mapper.Map<Node>(moveNodeDto);
-        _context.Nodes.Add(node);
-        await _context.SaveChangesAsync();
-        await Clients.Group(node.RoomId).SendAsync("Node Moved", moveNodeDto);
+        var createNode = await _diagramService.CreateNodeAsync(createNodeDto);
+        await Clients.Group(createNodeDto.RoomId).SendAsync("Node Created", createNode);
     }
 
-    public async Task UpdateCursor(CursorDto cursorDto)
+    public async Task MoveNode(MoveNodeDto moveNodeDto, int id)
+    {
+        var updateNode = await _diagramService.MoveNodeAsync(moveNodeDto, id);
+        await Clients.Group(moveNodeDto.RoomId).SendAsync("Node Moved", updateNode);
+    }
+
+    public async Task DeleteNode(int id, int roomId)
+    {
+        var deleteNode = await _diagramService.DeleteNodeAsync(id);
+        await Clients.Group(roomId.ToString()).SendAsync("Node Deleted", deleteNode);
+    }
+    public async Task CreateEdge(CreateEdgeDto createEdgeDto)
+    {
+        var createEdge = _diagramService.CreateEdgeAsync(createEdgeDto);
+        await Clients.Group(createEdgeDto.RoomId).SendAsync("Edge Created", createEdge);
+    }
+    public async Task DeleteEdge(int id, int roomId)
+    {
+        var deleteEdge = await _diagramService.DeleteEdgeAsync(id);
+        await Clients.Group(roomId.ToString()).SendAsync("Edge Deleted", deleteEdge);
+    }
+
+    public async Task CursorMoved(CursorDto cursorDto)
     {
         await Clients.Others.SendAsync("CursorPositionUpdated", Context.ConnectionId, cursorDto);
     }

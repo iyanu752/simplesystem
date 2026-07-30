@@ -24,9 +24,9 @@ public class DiagramService : IDiagramService
 
     }
 
-    public async Task<NodeDto?> MoveNodeAsync(MoveNodeDto moveNodeDto, int id)
+    public async Task<NodeDto?> MoveNodeAsync(MoveNodeDto moveNodeDto)
     {
-        var node = await _context.Nodes.FindAsync(id);
+        var node = await _context.Nodes.FindAsync(moveNodeDto.NodeId);
         if (node == null)
         {
             return null;
@@ -36,9 +36,9 @@ public class DiagramService : IDiagramService
         return _mapper.Map<NodeDto>(node);
     }
 
-    public async Task<bool> DeleteNodeAsync(int id) 
+    public async Task<bool> DeleteNodeAsync(string nodeId) 
     {
-        var node = await _context.Nodes.FindAsync(id);
+        var node = await _context.Nodes.FindAsync(nodeId);
         if (node == null)
         {
             return false;

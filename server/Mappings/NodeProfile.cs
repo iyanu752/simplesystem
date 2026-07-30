@@ -14,6 +14,12 @@ public class NodeProfile : Profile
         CreateMap<Edge, EdgeDto>();
         CreateMap<CreateUserDto, User>();
         CreateMap<User, UserDto>();
+        CreateMap<CreateRoomDto, Room>()
+            .ForMember(dest => dest.Users, opt => opt.MapFrom(src => new List<User>
+            {
+                new User { UserName = src.UserName }
+            }));
+        CreateMap<Room, RoomDto>();
     }
 
 }
